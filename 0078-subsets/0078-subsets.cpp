@@ -1,20 +1,14 @@
 class Solution {
 public:
-    void subsetsum(int index, vector<int>& nums, vector<int>& subset, vector<vector<int>>& result) {
-        if (index == nums.size()) {
-            result.push_back(subset);
-            return;
-        }
-        subset.push_back(nums[index]);
-        subsetsum(index + 1, nums, subset, result);
-        subset.pop_back();
-        subsetsum(index + 1, nums, subset, result);
-    }
-
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<int> subset;
         vector<vector<int>> result;
-        subsetsum(0, nums, subset, result);
+        for(int i=0;i<(1<<nums.size());i++){
+            vector<int> tmp;
+            for(int j=0;j<nums.size();j++){
+                if(i&(1<<j))    tmp.emplace_back(nums[j]);
+            }
+            result.emplace_back(tmp);
+        }
         return result;
     }
 };
