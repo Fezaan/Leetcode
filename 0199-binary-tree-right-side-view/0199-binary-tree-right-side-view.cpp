@@ -14,7 +14,6 @@ public:
     vector<int> rightSideView(TreeNode* root) {
         vector<int> res;
         if(!root)   return res;
-        map<int,int> mp;
         queue<pair<TreeNode*, int>> q;
         q.push({root,0});
         while(!q.empty()){
