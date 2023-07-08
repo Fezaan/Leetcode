@@ -11,16 +11,8 @@
  */
 class Solution {
 public:
-    void pre(TreeNode* root, int & res){
-        if(!root)   return;
-        res++;
-        pre(root->left,res);
-        pre(root->right,res);
-    }
     int countNodes(TreeNode* root) {
         if(!root)   return 0;
-        int cnt=0;
-        pre(root,cnt);
-        return cnt;
+        return 1+countNodes(root->left)+countNodes(root->right);
     }
 };
