@@ -9,10 +9,19 @@ public:
     }
     int minimumTotal(vector<vector<int>>& triangle) {
         vector<vector<int>> dp;
+        int n=triangle.size();
         for(int i=0;i<triangle.size();i++){
             vector<int> tmp(i+1,-1);
             dp.push_back(tmp);
         }
-        return f(0,0,triangle.size()-1,triangle,dp);
+        dp[n-1]=triangle[n-1];
+        for(int i=n-2;i>=0;i--){
+            for(int j=i;j>=0;j--){
+                int down=dp[i+1][j]+triangle[i][j];
+                int dia=dp[i+1][j+1]+triangle[i][j];
+                dp[i][j]=min(down,dia);
+            }
+        }
+        return dp[0][0];
     }
 };
