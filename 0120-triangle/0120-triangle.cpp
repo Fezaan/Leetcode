@@ -8,20 +8,17 @@ public:
         return dp[i][j]=tri[i][j]+min(down,dia);
     }
     int minimumTotal(vector<vector<int>>& triangle) {
-        vector<vector<int>> dp;
         int n=triangle.size();
-        for(int i=0;i<triangle.size();i++){
-            vector<int> tmp(i+1,-1);
-            dp.push_back(tmp);
-        }
-        dp[n-1]=triangle[n-1];
+        vector<int> dp(triangle[n-1]);
         for(int i=n-2;i>=0;i--){
+            vector<int> tmp(n,0);
             for(int j=i;j>=0;j--){
-                int down=dp[i+1][j]+triangle[i][j];
-                int dia=dp[i+1][j+1]+triangle[i][j];
-                dp[i][j]=min(down,dia);
+                int down=dp[j]+triangle[i][j];
+                int dia=dp[j+1]+triangle[i][j];
+                tmp[j]=min(down,dia);
             }
+            dp=tmp;
         }
-        return dp[0][0];
+        return dp[0];
     }
 };
