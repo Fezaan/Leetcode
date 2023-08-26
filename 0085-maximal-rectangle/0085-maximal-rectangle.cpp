@@ -1,68 +1,36 @@
 class Solution {
 public:
-vector<int> nextsmaller(vector<int> &v){
-    stack<int> st;
-    st.push(-1);
-    vector<int> ans(v.size());
-    for(int i=v.size()-1;i>=0;i--){
-        int curr=v[i];
-        while(st.top()!=-1&&v[st.top()]>=curr){
-            st.pop();
-        }
-        ans[i]=st.top();
-        st.push(i);
-    }
-    return ans;
-    }
-    vector<int> prevsmaller(vector<int> &v){
+    int histo(vector<int>& heights){
+        int n=heights.size();
         stack<int> st;
-        st.push(-1);
-        vector<int> ans(v.size());
-        for(int i=0;i<v.size();i++){
-            int curr=v[i];
-            while(st.top()!=-1&&v[st.top()]>=curr){
+        int mx=INT_MIN;
+        for(int i=0;i<=n;i++){
+            while(!st.empty() && (i==n || heights[i]<=heights[st.top()])){
+                int h=heights[st.top()];
                 st.pop();
+                int width;
+                if(st.empty())  width=i;
+                else width=i-st.top()-1;
+                int area=width*h;
+                mx=max(mx,area);
             }
-            ans[i]=st.top();
             st.push(i);
         }
-        return ans;
-    }
-    int maxHisto(vector<int>& heights) {
-        vector<int> prev=prevsmaller(heights);
-        vector<int> next=nextsmaller(heights);
-        int size=heights.size();
-        int maxlen=INT_MIN;
-        for(int i=0;i<heights.size();i++){
-            int len=heights[i];
-            if(next[i]==-1)
-                next[i]=size;
-            int width=next[i]-prev[i]-1;
-            int area=len*width;
-            maxlen=max(maxlen,area);
-        }
-        return maxlen;
+        return mx;
     }
     int maximalRectangle(vector<vector<char>>& matrix) {
-        vector<vector<int>> v(matrix.size());
-       for(int i=0;i<matrix.size();i++){
-           for(int j=0;j<matrix[i].size();j++){
-               if(matrix[i][j]=='0')
-  v[i].push_back(0);
-  else v[i].push_back(1);
-           }
-       } 
-       int first= maxHisto(v[0]);
-     for(int i=1;i<v.size();i++){
-        for(int j=0;j<v[i].size();j++){
-            if(v[i][j]!=0){
-                v[i][j]=v[i-1][j]+v[i][j];
+        int mx=0;
+        int n=matrix.size();
+        int m=matrix[0].size();
+        vector<int> heights(m,0);
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]=='1')   heights[j]++;
+                else heights[j]=0;
             }
-            else v[i][j]=0;
+            int area=histo(heights);
+            mx=max(area,mx);
         }
-        int a=  maxHisto(v[i]);
-        first= max(first,a);
-     }
-    return first;
-    }   
+        return mx;
+    }
 };
