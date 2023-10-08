@@ -9,14 +9,17 @@ public:
     }
     int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
         int n=nums1.size(), m=nums2.size();
-        vector<vector<int>> dp(n+1,vector<int> (m+1,INT_MIN));
+        if(n<m) return maxDotProduct(nums2,nums1);
+        // vector<vector<int>> dp(n+1,vector<int> (m+1,INT_MIN));
+        vector<int>curr(n+1,INT_MIN), prev(n+1, INT_MIN);
         // return f(0,0,n,m,nums1,nums2,dp);
         for(int i=1;i<=n;i++){
             for(int j=1;j<=m;j++){
                 int prod=nums1[i-1]*nums2[j-1];
-                dp[i][j]=max(prod+max(dp[i-1][j-1],0), max(dp[i-1][j],dp[i][j-1]));
+                curr[j]=max(prod+max(prev[j-1],0), max(prev[j],curr[j-1]));
             }
+            prev=curr;
         }
-        return dp[n][m];
+        return prev[m];
     }
 };
